@@ -113,7 +113,7 @@
             set: function (HTML) {
               innerHTML.set.call(this, HTML);
               if (/\bis=("|')?[a-z0-9_-]+\1/i.test(HTML))
-                setupSubNodes(this.nodeType === 11 ? this.content : this, setupIfNeeded);
+                setupSubNodes(this.content || this, setupIfNeeded);
             }
           }
         }
@@ -227,8 +227,8 @@
         desc[name] = {
           value: function () {
             var result = method.apply(this, arguments);
-            if (result.nodeType === 1) setupSubNodes(result, setupIfNeeded);
-            else if (result.nodeType === 11) setupSubNodes(result.content, setupIfNeeded);
+            if (result.nodeType === 1 || result.nodeType === 11)
+              setupSubNodes(result.content instanceof Node ? result.content : result, setupIfNeeded);
             return result;
           }
         };
